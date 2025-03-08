@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GPT-2 Text Generator</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>GPT-2 Text Generator</h1>
+        <form action="/generate" method="post">
+            <div class="form-group">
+                <label for="prompt">Enter your prompt:</label>
+                <textarea id="prompt" name="prompt" rows="4" required>{{ prompt if prompt else "" }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="max_length">Max Length:</label>
+                <input type="number" id="max_length" name="max_length" value="{{ max_length if max_length else 50 }}" min="10" max="500">
+            </div>
+            <button type="submit">Generate</button>
+        </form>
+
+        {% if error %}
+            <div class="error">
+                <p>Error: {{ error }}</p>
+            </div>
+        {% endif %}
+
+        {% if generated_texts %}
+            <div class="results">
+                <h2>Generated Text:</h2>
+                {% for text in generated_texts %}
+                    <div class="generated-text">
+                        <p>{{ text }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
