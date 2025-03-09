@@ -33,17 +33,20 @@ Full fine-tuning of Large Language Models is the process of turning general-purp
 
 ### Run training
 ```python
-python -m train_eval_pipeline.main --mode "train"
+cd train_eval_pipeline
+python -m main --mode "train"
 ```
 
 ### Run evaluation
 ```python
-python -m train_eval_pipeline.main --mode "eval"
+cd train_eval_pipeline
+python -m main --mode "eval"
 ```
 
 ### Run training with following evaluation
 ```python
-python -m train_eval_pipeline.main --mode "train_eval"
+cd train_eval_pipeline
+python -m main --mode "train_eval"
 ```
 
 ## Run Super Weights identification 
@@ -56,7 +59,8 @@ Code for Super Weights identification is based on the official [repository](http
 
 ### Run
 ```python
-python -m super_weights_identification.main
+cd super_weights_identification
+python -m main
 ```
 
 ## Run web application 
