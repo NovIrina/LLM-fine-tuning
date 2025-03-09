@@ -1,3 +1,6 @@
+"""
+This module contains the definition of the ProjectArguments dataclass.
+"""
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Union
@@ -7,6 +10,9 @@ from src.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_TOKENIZER
 
 @dataclass
 class ProjectArguments:
+    """
+    The arguments for the project.
+    """
     path_to_model: Path = (PATH_TO_MODEL,)
     path_to_tokenizer: Path = (PATH_TO_TOKENIZER,)
     path_to_dataset: Path = (PATH_TO_DATASET,)
@@ -15,5 +21,4 @@ class ProjectArguments:
     lora_dropout: float = (0.1,)
     lora_target_modules: Union[str, List[str]] = ("all-linear",)
     lora_layers_to_transform: Optional[List[str]] = (None,)
-    device: str = ("mps",)
     eval_batch_size: int = 8

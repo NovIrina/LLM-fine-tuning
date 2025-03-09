@@ -1,0 +1,11 @@
+[[tool.mypy.overrides]]
+module = ["main.py", "web_site/*", "src/*"]
+disable_error_code = [
+    'import-untyped',
+    'import-not-found'
+]
+
+[tool.mypy]
+exclude = [
+    'venv'
+]

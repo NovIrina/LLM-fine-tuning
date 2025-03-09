@@ -1,3 +1,6 @@
+"""
+This module contains the evaluation pipeline for the model.
+"""
 from pathlib import Path
 from typing import Tuple
 
@@ -12,6 +15,7 @@ from transformers import AutoModel, AutoTokenizer
 from src.arguments import ProjectArguments
 from src.model import load_model
 from src.tokenizer import load_tokenizer
+from src.utils import get_torch_device
 
 
 def compute_metrics(y_pred: list, y_true: list) -> None:
@@ -44,13 +48,13 @@ def load_peft_model(model: AutoModel, path: Path) -> PeftModel:
         PeftModel: The loaded PEFT model.
     """
     model = PeftModel.from_pretrained(model, path)
-    model = model.to("mps")
+    model = model.to(get_torch_device())
     model.eval()
     return model
 
 
 def batch_generator(
-    dataset: Dataset, batch_size: int, tokenizer: AutoTokenizer, device: str
+    dataset: Dataset, batch_size: int, tokenizer: AutoTokenizer
 ):
     """
     Generates batches of tokenized queries from the dataset.
@@ -59,7 +63,6 @@ def batch_generator(
         dataset (Dataset): The dataset to generate batches from.
         batch_size (int): The size of each batch.
         tokenizer (AutoTokenizer): The tokenizer to use for tokenization.
-        device (str): The device to load the tensors onto.
 
     Yields:
         Tuple: A tokenized batch and the original batch.
@@ -76,13 +79,13 @@ def batch_generator(
     for batch in loader:
         queries = list(batch["meaning_representation"])
         tokenized_query = tokenizer(queries, return_tensors="pt", padding=True).to(
-            device
+            get_torch_device()
         )
         yield tokenized_query, batch
 
 
 def get_batch_generator(
-    dataset: Dataset, batch_size: int, tokenizer: AutoTokenizer, device: str
+    dataset: Dataset, batch_size: int, tokenizer: AutoTokenizer
 ) -> Tuple[iter, int]:
     """
     Creates a batch generator for the validation dataset.
@@ -91,7 +94,6 @@ def get_batch_generator(
         dataset (Dataset): The dataset to use for validation.
         batch_size (int): The size of each batch.
         tokenizer (AutoTokenizer): The tokenizer to use for tokenization.
-        device (str): The device to load the tensors onto.
 
     Returns:
         Tuple[iter, int]: A generator for batches and the total number of unique queries.
@@ -104,12 +106,12 @@ def get_batch_generator(
         }
     )
     return (
-        batch_generator(dataset, batch_size, tokenizer, device),
+        batch_generator(dataset, batch_size, tokenizer),
         len(dataset["meaning_representation"]),
     )
 
 
-def validation_loop(
+def validation_loop(  # pylint: disable=too-many-locals
     batches: iter,
     model: AutoModel,
     dataset: Dataset,
@@ -141,10 +143,10 @@ def validation_loop(
     all_references = []
     all_predicted = []
 
-    model = model.to("mps")
+    model = model.to(get_torch_device())
 
     for input_batch, batch in tqdm(batches, total=num_eval_steps):
-        input_batch = input_batch.to("mps")
+        input_batch = input_batch.to(get_torch_device())
         output = model.generate(**input_batch, **generation_settings)
 
         predictions = []
@@ -158,7 +160,7 @@ def validation_loop(
             batch_pred, batch["meaning_representation"]
         ):
             filtered_dataset = dataset.filter(
-                lambda x: x["meaning_representation"] == meaning_representation
+                lambda x: x["meaning_representation"] == meaning_representation  # pylint: disable=cell-var-from-loop
             )
             for reference_sentence in filtered_dataset["validation"]["human_reference"]:
                 all_queries.append(meaning_representation)

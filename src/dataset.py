@@ -1,3 +1,6 @@
+"""
+This module contains the functions for preparing the dataset for processing.
+"""
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -19,7 +22,7 @@ def prepare_dataset(path: Path, tokenizer: AutoTokenizer) -> Dict[str, Any]:
     try:
         dataset = load_dataset(path)
     except Exception as e:
-        raise RuntimeError(f"Failed to load dataset from {path}: {e}")
+        raise RuntimeError(f"Failed to load dataset from {path}: {e}") from e
 
     column_names = list(dataset["train"].features)
     dataset = dataset.map(

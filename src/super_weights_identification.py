@@ -1,3 +1,7 @@
+# pylint: disable=redefined-outer-name, protected-access
+"""
+This script visualizes the super weights of the model by plotting the maximum activations.
+"""
 import re
 from pathlib import Path
 from typing import Dict, Tuple
@@ -13,6 +17,9 @@ from src.tokenizer import load_tokenizer
 
 
 class SuperWeightsIdentification(Tap):
+    """
+    Defines the command-line arguments for the script.
+    """
     path_to_model: Path
     path_to_tokenizer: Path
 
@@ -28,7 +35,8 @@ def get_max_activations(
         inputs (Dict[str, torch.Tensor]): The inputs to the model.
 
     Returns:
-        Tuple[Dict[int, Dict[str, float]], Dict[int, Dict[str, float]]]: Two dictionaries containing the largest input and output activations for each layer.
+        Tuple[Dict[int, Dict[str, float]], Dict[int, Dict[str, float]]]:
+            Two dictionaries containing the largest input and output activations for each layer.
     """
     all_activations = {}
 

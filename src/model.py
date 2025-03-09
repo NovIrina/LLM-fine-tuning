@@ -1,3 +1,6 @@
+"""
+This module contains the function to load a pre-trained model.
+"""
 from pathlib import Path
 
 from transformers import AutoModelForCausalLM
@@ -25,12 +28,12 @@ def load_model(
         try:
             pretrained_model = AutoModelForCausalLM.from_pretrained(str(path_to_save))
         except Exception as e:
-            raise RuntimeError(f"Failed to load model from {path_to_save}: {e}")
+            raise RuntimeError(f"Failed to load model from {path_to_save}: {e}") from e
     else:
         try:
             pretrained_model = AutoModelForCausalLM.from_pretrained(path_to_load)
             pretrained_model.save_pretrained(path_to_save)
         except Exception as e:
-            raise RuntimeError(f"Failed to load model from {path_to_load}: {e}")
+            raise RuntimeError(f"Failed to load model from {path_to_load}: {e}") from e
 
     return pretrained_model

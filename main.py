@@ -1,3 +1,6 @@
+"""
+This module is used to train and evaluate the model.
+"""
 import argparse
 from pathlib import Path
 from typing import List, Optional, Union
@@ -9,6 +12,9 @@ from src.train_pipeline import train_model
 
 
 def parse_arguments():
+    """
+    Parse the command-line arguments.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--path_to_model",

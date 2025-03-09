@@ -1,6 +1,7 @@
 """
-Utility functions for the web_site.
+Utility functions for the project.
 """
+
 import torch
 
 

@@ -1,3 +1,6 @@
+"""
+This module contains the training pipeline for the model.
+"""
 from functools import partial
 from typing import Any, Dict, Tuple
 
@@ -55,7 +58,7 @@ def train_model(arguments: ProjectArguments) -> None:
 
     training_args = TrainingArguments(
         output_dir="outputs/checkpoints/",
-        evaluation_strategy="steps",
+        evaluation_strategy="epoch",
         logging_strategy="steps",
         save_strategy="steps",
         save_steps=4000,
@@ -67,7 +70,7 @@ def train_model(arguments: ProjectArguments) -> None:
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         num_train_epochs=1,
-        eval_steps=5000,
+        eval_steps=1,
         metric_for_best_model="accuracy",
         greater_is_better=True,
         use_mps_device=True,
