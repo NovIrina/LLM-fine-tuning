@@ -57,6 +57,11 @@ Code for Super Weights identification is based on the official [repository](http
 * `--path_to_model` - path to your model, by default: `openai-community/gpt2`
 * `--path_to_tokenizer` - path to model tokenizer, by default: `openai-community/gpt2`
 
+For the GPT2 model the following Super Weight were identified: 
+![Example Image](outputs/figures/super_weights_outputs.pdf)
+
+The greatest activations occur in the `mlp.c_proj` module of 2 layer and `attn.c_proj` module of 11 layer. Therefore, only these layers were chosen for the following LoRA-based fine-tuning.
+
 ### Run
 ```python
 cd super_weights_identification
