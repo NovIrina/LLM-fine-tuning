@@ -1,0 +1,90 @@
+name: "Check Commit Readiness"
+
+on:
+  push:
+    branches:
+      - "**"
+
+concurrency:
+  group: ${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REPOSITORY_TYPE: private
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  BRANCH_NAME: ${{ github.ref }}
+
+jobs:
+  install-dependencies:
+    name: Installing dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: bash config/venv_setup.sh
+
+  code-style:
+    name: Code Style
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: [ install-dependencies ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup environment
+        run: |
+          bash config/venv_setup.sh
+      - name: Code Style
+        run: |
+          bash config/pylint/run_pylint.sh
+
+  mypy-checks:
+    name: Mypy checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [ install-dependencies ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup environment
+        run: |
+          bash config/venv_setup.sh
+      - name: MyPy check
+        run: |
+          bash config/run_mypy.sh
+
+  isort-checks:
+    name: Import order checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: [ install-dependencies ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup environment
+        run: |
+          bash config/venv_setup.sh
+      - name: Isort check
+        run: |
+          bash config/run_isort.sh
+
+  black-checks:
+    name: Black checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: [ install-dependencies ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup environment
+        run: |
+          bash config/venv_setup.sh
+      - name: Black check
+        run: |
+          bash config/run_black.sh
