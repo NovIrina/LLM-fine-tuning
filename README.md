@@ -19,6 +19,12 @@ Full fine-tuning of Large Language Models is the process of turning general-purp
 ```
 
 ## Run training 
+### Arguments 
+
+### Run
+```python
+python -m train_eval_pipeline.main
+```
 
 ## Run evaluation
 
@@ -32,7 +38,6 @@ Full fine-tuning of Large Language Models is the process of turning general-purp
 ```python
 python -m super_weights_identification.main
 ```
-
 
 ## Run web application 
 

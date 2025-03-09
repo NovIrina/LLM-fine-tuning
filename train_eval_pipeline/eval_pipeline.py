@@ -5,12 +5,12 @@ from typing import Tuple
 
 import evaluate
 import pandas as pd
-from datasets import Dataset, load_dataset, load_metric
+from datasets import Dataset, load_dataset
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
 
-from train_eval_pipeline.arguments import ProjectArguments
+from train_eval_pipeline.arguments import TrainEvalArguments
 from train_eval_pipeline.model import load_model, load_peft_model
 from train_eval_pipeline.tokenizer import load_tokenizer
 from train_eval_pipeline.utils import get_torch_device
@@ -159,7 +159,7 @@ def validation_loop(  # pylint: disable=too-many-locals
     return all_queries, all_predicted, all_references
 
 
-def eval_model(arguments: ProjectArguments) -> None:
+def eval_model(arguments: TrainEvalArguments) -> None:
     """
     Evaluates the model and computes metrics.
     """

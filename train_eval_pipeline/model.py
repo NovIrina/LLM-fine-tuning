@@ -6,12 +6,12 @@ from pathlib import Path
 from peft import PeftModel
 from transformers import AutoModel, AutoModelForCausalLM
 
-from train_eval_pipeline.constants import PATH_TO_MODEL
+from train_eval_pipeline.constants import PATH_TO_MODEL, PATH_TO_SAVE_MODEL
 from train_eval_pipeline.utils import get_torch_device
 
 
 def load_model(
-    path_to_save: Path, path_to_load: Path = PATH_TO_MODEL
+    path_to_save: Path = PATH_TO_SAVE_MODEL, path_to_load: Path = PATH_TO_MODEL
 ) -> AutoModelForCausalLM:
     """
     Loads a pre-trained model.
@@ -27,16 +27,10 @@ def load_model(
         AutoModelForCausalLM: The loaded causal language model.
     """
     if path_to_save.exists():
-        try:
-            pretrained_model = AutoModelForCausalLM.from_pretrained(str(path_to_save))
-        except Exception as e:
-            raise RuntimeError(f"Failed to load model from {path_to_save}: {e}") from e
+        pretrained_model = AutoModelForCausalLM.from_pretrained(str(path_to_save))
     else:
-        try:
-            pretrained_model = AutoModelForCausalLM.from_pretrained(path_to_load)
-            pretrained_model.save_pretrained(path_to_save)
-        except Exception as e:
-            raise RuntimeError(f"Failed to load model from {path_to_load}: {e}") from e
+        pretrained_model = AutoModelForCausalLM.from_pretrained(path_to_load)
+        pretrained_model.save_pretrained(path_to_save)
 
     return pretrained_model
 

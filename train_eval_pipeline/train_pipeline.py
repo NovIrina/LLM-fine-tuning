@@ -8,8 +8,7 @@ import evaluate
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import Trainer, TrainingArguments, default_data_collator
 
-from train_eval_pipeline.arguments import ProjectArguments
-from train_eval_pipeline.constants import PATH_TO_PEFT_MODEL
+from train_eval_pipeline.arguments import TrainEvalArguments
 from train_eval_pipeline.dataset import prepare_dataset
 from train_eval_pipeline.model import load_model
 from train_eval_pipeline.tokenizer import load_tokenizer
@@ -32,11 +31,11 @@ def compute_metrics(metric: Any, eval_predictions: Tuple) -> Dict[str, float]:
     return metric.compute(predictions=predictions, references=labels)
 
 
-def train_model(arguments: ProjectArguments) -> None:
+def train_model(arguments: TrainEvalArguments) -> None:
     """
     Trains the model using the specified configurations and datasets.
     """
-    model = load_model(arguments.path_to_model)
+    model = load_model(path_to_load=arguments.path_to_model)
     tokenizer = load_tokenizer(arguments.path_to_tokenizer)
     dataset = prepare_dataset(arguments.path_to_dataset, tokenizer)
 
@@ -46,6 +45,8 @@ def train_model(arguments: ProjectArguments) -> None:
         r=arguments.lora_rank,
         lora_alpha=arguments.lora_alpha,
         lora_dropout=arguments.lora_dropout,
+        target_modules=arguments.lora_target_modules,
+        layers_to_transform=arguments.lora_layers_to_transform,
         bias="none",
     )
 
@@ -58,7 +59,7 @@ def train_model(arguments: ProjectArguments) -> None:
     compute_metrics_func = partial(compute_metrics, metric)
 
     training_args = TrainingArguments(
-        output_dir=PATH_TO_PEFT_MODEL,
+        output_dir=arguments.path_to_peft_model,
         evaluation_strategy="epoch",
         logging_strategy="steps",
         save_strategy="steps",
@@ -71,7 +72,6 @@ def train_model(arguments: ProjectArguments) -> None:
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         num_train_epochs=1,
-        eval_steps=1,
         metric_for_best_model="accuracy",
         greater_is_better=True,
         use_mps_device=True,
@@ -91,4 +91,4 @@ def train_model(arguments: ProjectArguments) -> None:
     print("Starting training")
     trainer.train()
     print("Finished training")
-    trainer.save_model(PATH_TO_PEFT_MODEL)
+    trainer.save_model(arguments.path_to_peft_model)

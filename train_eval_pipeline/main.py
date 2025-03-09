@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 from train_eval_pipeline.arguments import TrainEvalArguments
-from train_eval_pipeline.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_TOKENIZER
+from train_eval_pipeline.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_PEFT_MODEL, PATH_TO_TOKENIZER
 from train_eval_pipeline.eval_pipeline import eval_model
 from train_eval_pipeline.modes import UsageModes
 from train_eval_pipeline.train_pipeline import train_model
@@ -21,62 +21,61 @@ def parse_arguments():
         "--path_to_model",
         type=Path,
         default=PATH_TO_MODEL,
-        required=True,
+        help="Path to model",
+    )
+    parser.add_argument(
+        "--path_to_peft_model",
+        type=Path,
+        default=PATH_TO_PEFT_MODEL,
         help="Path to model",
     )
     parser.add_argument(
         "--path_to_tokenizer",
         type=Path,
         default=PATH_TO_TOKENIZER,
-        required=True,
         help="Path to tokenizer",
     )
     parser.add_argument(
         "--path_to_dataset",
-        type=Path,
+        type=str,
         default=PATH_TO_DATASET,
-        required=True,
         help="Path to dataset",
     )
     parser.add_argument(
-        "--lora_rank", type=int, default=4, required=True, help="Rank of LoRA adapters"
+        "--lora_rank", type=int, default=4, help="Rank of LoRA adapters"
     )
     parser.add_argument(
         "--lora_alpha",
         type=int,
         default=32,
-        required=True,
         help="Alpha of LoRA adapters",
     )
     parser.add_argument(
-        "--lora_dropout", type=float, default=0.1, required=True, help="LoRA dropout"
+        "--lora_dropout", type=float, default=0.1, help="LoRA dropout"
     )
     parser.add_argument(
         "--lora_target_modules",
-        type=Union[str, List[str]],
+        type=str,
         default="all-linear",
-        required=True,
         help="Target modules to apply LoRA adapters",
     )
     parser.add_argument(
         "--lora_layers_to_transform",
         type=Optional[List[str]],
         default=None,
-        required=True,
         help="Layers to apply LoRA adapters",
     )
     parser.add_argument(
         "--mode",
         type=UsageModes,
         default=UsageModes.TRAINING_AND_EVALUATION,
-        required=True,
         help="Mode to run pipeline"
     )
 
     return parser.parse_args()
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     args = parse_arguments()
     config = TrainEvalArguments(
         path_to_model=args.path_to_model,
