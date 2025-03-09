@@ -71,6 +71,12 @@ def parse_arguments():
         default=UsageModes.TRAINING_AND_EVALUATION,
         help="Mode to run pipeline"
     )
+    parser.add_argument(
+        "--validation_batch_size",
+        type=int,
+        default=8,
+        help="Batch size used for validation"
+    )
 
     return parser.parse_args()
 
@@ -87,6 +93,7 @@ if __name__ == "__main__":
         lora_dropout=args.lora_dropout,
         lora_target_modules=args.lora_target_modules,
         lora_layers_to_transform=args.lora_layers_to_transform,
+        validation_batch_size = args.validation_batch_size
     )
     if args.mode is UsageModes.TRAINING:
         train_model(config)

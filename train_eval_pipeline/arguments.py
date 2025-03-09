@@ -22,3 +22,4 @@ class TrainEvalArguments:
     lora_dropout: float = (0.1,)
     lora_target_modules: Union[str, List[str]] = ("all-linear",)
     lora_layers_to_transform: Optional[List[str]] = (None,)
+    validation_batch_size: int = (8,)

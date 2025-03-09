@@ -1,6 +1,7 @@
 """
 This module contains the evaluation pipeline for the model.
 """
+from pathlib import Path
 from typing import Tuple
 
 import evaluate
@@ -18,7 +19,7 @@ from train_eval_pipeline.utils import get_torch_device
 
 def compute_metrics(y_pred: list, y_true: list) -> None:
     """
-    Computes and prints BLEU and perplexity scores.
+    Computes BLEU score.
 
     Args:
         y_pred (list): List of predicted sentences.
@@ -28,10 +29,6 @@ def compute_metrics(y_pred: list, y_true: list) -> None:
     metric.add_batch(predictions=y_pred, references=y_true)
     bleu = float(metric.compute()["bleu"]) * 100
     print(f"BLEU score: {bleu}")
-
-    perplexity_metric = load_metric("perplexity")
-    perplexity = perplexity_metric.compute(predictions=y_pred, references=y_true)
-    print(f"Perplexity score: {perplexity}")
 
 
 def batch_generator(
@@ -114,8 +111,8 @@ def validation_loop(  # pylint: disable=too-many-locals
     """
     generation_settings = {
         "max_new_tokens": 64,
-        "num_beams": 1,  # Disable beam search by setting to 1
-        "do_sample": False,  # Use greedy decoding
+        "num_beams": 1, 
+        "do_sample": False, 
         "no_repeat_ngram_size": 4,
         "repetition_penalty": 1.0,
     }
@@ -163,15 +160,16 @@ def eval_model(arguments: TrainEvalArguments) -> None:
     """
     Evaluates the model and computes metrics.
     """
+    path_to_peft_model = Path(f"{arguments.path_to_peft_model}/checkpoint-4000")
     model = load_model(arguments.path_to_model)
-    peft_model = load_peft_model(model, arguments.path_to_peft_model)
+    peft_model = load_peft_model(model, path_to_peft_model)
     tokenizer = load_tokenizer(arguments.path_to_tokenizer)
     dataset = load_dataset(arguments.path_to_dataset)
     batches = get_batch_generator(
-        dataset, arguments.eval_batch_size, tokenizer, arguments.device
+        dataset, arguments.validation_batch_size, tokenizer
     )
 
-    num_iterations = batches[1] // 8
+    num_iterations = batches[1] // arguments.validation_batch_size
     all_queries, all_predicted, all_references = validation_loop(
         batches[0], peft_model, dataset, tokenizer, num_iterations
     )
