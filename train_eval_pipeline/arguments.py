@@ -9,7 +9,7 @@ from train_eval_pipeline.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_T
 
 
 @dataclass
-class ProjectArguments:
+class TrainEvalArguments:
     """
     The arguments for the project.
     """
@@ -22,4 +22,3 @@ class ProjectArguments:
     lora_dropout: float = (0.1,)
     lora_target_modules: Union[str, List[str]] = ("all-linear",)
     lora_layers_to_transform: Optional[List[str]] = (None,)
-    eval_batch_size: int = 8

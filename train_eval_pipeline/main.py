@@ -5,9 +5,10 @@ import argparse
 from pathlib import Path
 from typing import List, Optional, Union
 
-from train_eval_pipeline.arguments import ProjectArguments
+from train_eval_pipeline.arguments import TrainEvalArguments
 from train_eval_pipeline.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_TOKENIZER
 from train_eval_pipeline.eval_pipeline import eval_model
+from train_eval_pipeline.modes import UsageModes
 from train_eval_pipeline.train_pipeline import train_model
 
 
@@ -65,18 +66,11 @@ def parse_arguments():
         help="Layers to apply LoRA adapters",
     )
     parser.add_argument(
-        "--device",
-        type=str,
-        default="mps",
+        "--mode",
+        type=UsageModes,
+        default=UsageModes.TRAINING_AND_EVALUATION,
         required=True,
-        help="Device to train and validate the model",
-    )
-    parser.add_argument(
-        "--eval_batch_size",
-        type=int,
-        default=8,
-        required=True,
-        help="Batch for validation",
+        help="Mode to run pipeline"
     )
 
     return parser.parse_args()
@@ -84,8 +78,9 @@ def parse_arguments():
 
 if __name__ == "main":
     args = parse_arguments()
-    config = ProjectArguments(
+    config = TrainEvalArguments(
         path_to_model=args.path_to_model,
+        path_to_peft_model=args.path_to_peft_model,
         path_to_tokenizer=args.path_to_tokenizer,
         path_to_dataset=args.path_to_dataset,
         lora_rank=args.lora_rank,
@@ -93,8 +88,11 @@ if __name__ == "main":
         lora_dropout=args.lora_dropout,
         lora_target_modules=args.lora_target_modules,
         lora_layers_to_transform=args.lora_layers_to_transform,
-        device=args.device,
-        eval_batch_size=args.eval_batch_size,
     )
-    train_model(config)
-    eval_model(config)
+    if args.mode is UsageModes.TRAINING:
+        train_model(config)
+    elif args.mode is UsageModes.EVALUATION:
+        eval_model(config)
+    else:
+        train_model(config)
+        eval_model(config)

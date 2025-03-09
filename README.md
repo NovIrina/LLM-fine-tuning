@@ -8,12 +8,31 @@ Full fine-tuning of Large Language Models is the process of turning general-purp
 - Baseline: [LoRA](https://arxiv.org/abs/2106.09685)-based fine-tuning;
 
 ## Setup
+1. Create virtual environment
+```bash
+    python3.11 -m venv venv
+    source venv/bin/activate
+```
+2. Install project dependencies
+```bash
+    pip install -r requirements.txt
+```
 
 ## Run training 
 
 ## Run evaluation
 
 ## Run Super Weights identification 
+
+### Arguments 
+* `--path_to_model` - path to your model, by default: `openai-community/gpt2`
+* `--path_to_tokenizer` - path to model tokenizer, by default: `openai-community/gpt2`
+
+### Run
+```python
+python -m super_weights_identification.main
+```
+
 
 ## Run web application 
 

@@ -12,6 +12,7 @@ import torch
 from tap import Tap
 from transformers import AutoTokenizer
 
+from train_eval_pipeline.constants import PATH_TO_MODEL, PATH_TO_TOKENIZER
 from train_eval_pipeline.model import load_model
 from train_eval_pipeline.tokenizer import load_tokenizer
 
@@ -20,8 +21,8 @@ class SuperWeightsIdentification(Tap):
     """
     Defines the command-line arguments for the script.
     """
-    path_to_model: Path
-    path_to_tokenizer: Path
+    path_to_model: Path=PATH_TO_MODEL
+    path_to_tokenizer: Path=PATH_TO_TOKENIZER
 
 
 def get_max_activations(
@@ -109,7 +110,7 @@ def make_plot(dataframe: pd.DataFrame, label: str) -> None:
     for module in dataframe.columns[1:]:
         plt.plot(dataframe["layer_number"], dataframe[module], marker="o", label=module)
 
-    plt.title("Super Weights inside Different Layers")
+    plt.title("Super Weights distribution across layers")
     plt.xlabel("Layer Number")
     plt.ylabel(f"Activation Values {label}")
     plt.legend()
