@@ -5,10 +5,10 @@ import argparse
 from pathlib import Path
 from typing import List, Optional, Union
 
-from src.arguments import ProjectArguments
-from src.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_TOKENIZER
-from src.eval_pipeline import eval_model
-from src.train_pipeline import train_model
+from train_eval_pipeline.arguments import ProjectArguments
+from train_eval_pipeline.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_TOKENIZER
+from train_eval_pipeline.eval_pipeline import eval_model
+from train_eval_pipeline.train_pipeline import train_model
 
 
 def parse_arguments():

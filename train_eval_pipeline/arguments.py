@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Union
 
-from src.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_TOKENIZER
+from train_eval_pipeline.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_PEFT_MODEL, PATH_TO_TOKENIZER
 
 
 @dataclass
@@ -14,6 +14,7 @@ class ProjectArguments:
     The arguments for the project.
     """
     path_to_model: Path = (PATH_TO_MODEL,)
+    path_to_peft_model: Path = (PATH_TO_PEFT_MODEL,)
     path_to_tokenizer: Path = (PATH_TO_TOKENIZER,)
     path_to_dataset: Path = (PATH_TO_DATASET,)
     lora_rank: int = (4,)

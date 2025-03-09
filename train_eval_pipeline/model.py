@@ -3,9 +3,11 @@ This module contains the function to load a pre-trained model.
 """
 from pathlib import Path
 
-from transformers import AutoModelForCausalLM
+from peft import PeftModel
+from transformers import AutoModel, AutoModelForCausalLM
 
-from src.constants import PATH_TO_MODEL
+from train_eval_pipeline.constants import PATH_TO_MODEL
+from train_eval_pipeline.utils import get_torch_device
 
 
 def load_model(
@@ -37,3 +39,19 @@ def load_model(
             raise RuntimeError(f"Failed to load model from {path_to_load}: {e}") from e
 
     return pretrained_model
+
+def load_peft_model(model: AutoModel, path: Path) -> PeftModel:
+    """
+    Loads a PEFT model from the specified path.
+
+    Args:
+        model (AutoModel): The base model to enhance with PEFT.
+        path (Path): The path to load the PEFT model from.
+
+    Returns:
+        PeftModel: The loaded PEFT model.
+    """
+    model = PeftModel.from_pretrained(model, path)
+    model = model.to(get_torch_device())
+    model.eval()
+    return model

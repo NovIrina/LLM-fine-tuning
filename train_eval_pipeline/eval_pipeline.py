@@ -1,21 +1,19 @@
 """
 This module contains the evaluation pipeline for the model.
 """
-from pathlib import Path
 from typing import Tuple
 
 import evaluate
 import pandas as pd
 from datasets import Dataset, load_dataset, load_metric
-from peft import PeftModel
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
 
-from src.arguments import ProjectArguments
-from src.model import load_model
-from src.tokenizer import load_tokenizer
-from src.utils import get_torch_device
+from train_eval_pipeline.arguments import ProjectArguments
+from train_eval_pipeline.model import load_model, load_peft_model
+from train_eval_pipeline.tokenizer import load_tokenizer
+from train_eval_pipeline.utils import get_torch_device
 
 
 def compute_metrics(y_pred: list, y_true: list) -> None:
@@ -34,23 +32,6 @@ def compute_metrics(y_pred: list, y_true: list) -> None:
     perplexity_metric = load_metric("perplexity")
     perplexity = perplexity_metric.compute(predictions=y_pred, references=y_true)
     print(f"Perplexity score: {perplexity}")
-
-
-def load_peft_model(model: AutoModel, path: Path) -> PeftModel:
-    """
-    Loads a PEFT model from the specified path.
-
-    Args:
-        model (AutoModel): The base model to enhance with PEFT.
-        path (Path): The path to load the PEFT model from.
-
-    Returns:
-        PeftModel: The loaded PEFT model.
-    """
-    model = PeftModel.from_pretrained(model, path)
-    model = model.to(get_torch_device())
-    model.eval()
-    return model
 
 
 def batch_generator(
@@ -183,6 +164,7 @@ def eval_model(arguments: ProjectArguments) -> None:
     Evaluates the model and computes metrics.
     """
     model = load_model(arguments.path_to_model)
+    peft_model = load_peft_model(model, arguments.path_to_peft_model)
     tokenizer = load_tokenizer(arguments.path_to_tokenizer)
     dataset = load_dataset(arguments.path_to_dataset)
     batches = get_batch_generator(
@@ -191,6 +173,6 @@ def eval_model(arguments: ProjectArguments) -> None:
 
     num_iterations = batches[1] // 8
     all_queries, all_predicted, all_references = validation_loop(
-        batches[0], model, dataset, tokenizer, num_iterations
+        batches[0], peft_model, dataset, tokenizer, num_iterations
     )
     compute_metrics(all_predicted, all_references)

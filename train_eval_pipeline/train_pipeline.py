@@ -8,10 +8,11 @@ import evaluate
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import Trainer, TrainingArguments, default_data_collator
 
-from src.arguments import ProjectArguments
-from src.dataset import prepare_dataset
-from src.model import load_model
-from src.tokenizer import load_tokenizer
+from train_eval_pipeline.arguments import ProjectArguments
+from train_eval_pipeline.constants import PATH_TO_PEFT_MODEL
+from train_eval_pipeline.dataset import prepare_dataset
+from train_eval_pipeline.model import load_model
+from train_eval_pipeline.tokenizer import load_tokenizer
 
 
 def compute_metrics(metric: Any, eval_predictions: Tuple) -> Dict[str, float]:
@@ -57,7 +58,7 @@ def train_model(arguments: ProjectArguments) -> None:
     compute_metrics_func = partial(compute_metrics, metric)
 
     training_args = TrainingArguments(
-        output_dir="outputs/checkpoints/",
+        output_dir=PATH_TO_PEFT_MODEL,
         evaluation_strategy="epoch",
         logging_strategy="steps",
         save_strategy="steps",
@@ -90,4 +91,4 @@ def train_model(arguments: ProjectArguments) -> None:
     print("Starting training")
     trainer.train()
     print("Finished training")
-    trainer.save_model("outputs/checkpoints")
+    trainer.save_model(PATH_TO_PEFT_MODEL)

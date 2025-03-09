@@ -5,7 +5,7 @@ from pathlib import Path
 
 from transformers import AutoTokenizer
 
-from src.constants import PATH_TO_TOKENIZER
+from train_eval_pipeline.constants import PATH_TO_TOKENIZER
 
 
 def load_tokenizer(path: Path = PATH_TO_TOKENIZER) -> AutoTokenizer:

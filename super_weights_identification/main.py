@@ -12,8 +12,8 @@ import torch
 from tap import Tap
 from transformers import AutoTokenizer
 
-from src.model import load_model
-from src.tokenizer import load_tokenizer
+from train_eval_pipeline.model import load_model
+from train_eval_pipeline.tokenizer import load_tokenizer
 
 
 class SuperWeightsIdentification(Tap):
