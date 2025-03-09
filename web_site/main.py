@@ -91,7 +91,7 @@ def create_app(model: AutoModel, tokenizer: AutoTokenizer):
 
 if __name__ == "__main__":
     parser = WebSiteArguments().parse_args()
-    model = load_model(path_to_save=parser.path_to_model)
+    model = load_model(path_to_load=parser.path_to_model)
     tokenizer = load_tokenizer(parser.path_to_tokenizer)
 
     app = create_app(model, tokenizer)
