@@ -58,7 +58,7 @@ Code for Super Weights identification is based on the official [repository](http
 * `--path_to_tokenizer` - path to model tokenizer, by default: `openai-community/gpt2`
 
 For the GPT2 model the following Super Weight were identified: 
-![Example Image](outputs/figures/super_weights_outputs.pdf)
+![Super Weights](outputs/figures/super_weights_outputs.jpg)
 
 The greatest activations occur in the `mlp.c_proj` module of 2 layer and `attn.c_proj` module of 11 layer. Therefore, only these layers were chosen for the following LoRA-based fine-tuning.
 
@@ -73,8 +73,7 @@ A website utilizing a LLM for text generation is highly relevant in today’s di
 
 To start the inference server, run the following command:
 ```bash
-cd web_site
-uvicorn main:app --reload
+python -m web_site.main
 ```
 
 (For inference aims a pretrained GPT2 model was used 
