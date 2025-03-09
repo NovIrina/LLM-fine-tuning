@@ -115,7 +115,7 @@ def make_plot(dataframe: pd.DataFrame, label: str) -> None:
     plt.ylabel(f"Activation Values {label}")
     plt.legend()
     plt.grid()
-    plt.savefig(f"outputs/figures/super_weights_{label}.pdf")
+    plt.savefig(f"outputs/figures/super_weights_{label}.jpg")
 
 
 def visualize_super_weights(model: torch.nn.Module, tokenizer: AutoTokenizer) -> None:
