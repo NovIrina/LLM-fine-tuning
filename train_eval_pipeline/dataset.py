@@ -1,8 +1,10 @@
 from typing import Any, Dict, List
-from datasets import load_dataset, disable_caching
+
+from datasets import disable_caching, load_dataset
 from transformers import AutoTokenizer
 
 disable_caching()
+
 
 def prepare_dataset(path: str, tokenizer: AutoTokenizer) -> Dict[str, Any]:
     """
@@ -22,9 +24,10 @@ def prepare_dataset(path: str, tokenizer: AutoTokenizer) -> Dict[str, Any]:
         batched=True,
         batch_size=None,
         num_proc=1,
-        remove_columns=column_names
+        remove_columns=column_names,
     )
     return dataset
+
 
 def create_label(input_ids: List[int], tokenizer: AutoTokenizer) -> List[int]:
     """
@@ -40,7 +43,9 @@ def create_label(input_ids: List[int], tokenizer: AutoTokenizer) -> List[int]:
     return [*input_ids[1:], tokenizer.pad_token_id]
 
 
-def process_batch(batch: Dict[str, List[str]], tokenizer: AutoTokenizer, column_names: List[str]) -> Dict[str, Any]:
+def process_batch(
+    batch: Dict[str, List[str]], tokenizer: AutoTokenizer, column_names: List[str]
+) -> Dict[str, Any]:
     """
     Processes a single batch of data.
 
@@ -54,11 +59,16 @@ def process_batch(batch: Dict[str, List[str]], tokenizer: AutoTokenizer, column_
     """
     batch = tokenizer(
         [
-            batch[column_names[0]][i] + " " + batch[column_names[1]][i] + tokenizer.eos_token 
+            batch[column_names[0]][i]
+            + " "
+            + batch[column_names[1]][i]
+            + tokenizer.eos_token
             for i in range(len(batch[column_names[0]]))
-        ], 
+        ],
         padding="max_length",
-        max_length=512
-        )
-    batch["labels"] = [create_label(input_ids, tokenizer) for input_ids in batch["input_ids"]]
+        max_length=512,
+    )
+    batch["labels"] = [
+        create_label(input_ids, tokenizer) for input_ids in batch["input_ids"]
+    ]
     return batch

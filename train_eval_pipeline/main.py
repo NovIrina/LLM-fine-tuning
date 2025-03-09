@@ -1,12 +1,18 @@
 """
 This module is used to train and evaluate the model.
 """
+
 import argparse
 from pathlib import Path
 from typing import List, Optional, Union
 
 from train_eval_pipeline.arguments import TrainEvalArguments
-from train_eval_pipeline.constants import PATH_TO_DATASET, PATH_TO_MODEL, PATH_TO_PEFT_MODEL, PATH_TO_TOKENIZER
+from train_eval_pipeline.constants import (
+    PATH_TO_DATASET,
+    PATH_TO_MODEL,
+    PATH_TO_PEFT_MODEL,
+    PATH_TO_TOKENIZER,
+)
 from train_eval_pipeline.eval_pipeline import eval_model
 from train_eval_pipeline.modes import UsageModes
 from train_eval_pipeline.train_pipeline import train_model
@@ -50,9 +56,7 @@ def parse_arguments():
         default=32,
         help="Alpha of LoRA adapters",
     )
-    parser.add_argument(
-        "--lora_dropout", type=float, default=0.1, help="LoRA dropout"
-    )
+    parser.add_argument("--lora_dropout", type=float, default=0.1, help="LoRA dropout")
     parser.add_argument(
         "--lora_target_modules",
         type=str,
@@ -69,13 +73,13 @@ def parse_arguments():
         "--mode",
         type=UsageModes,
         default=UsageModes.TRAINING_AND_EVALUATION,
-        help="Mode to run pipeline"
+        help="Mode to run pipeline",
     )
     parser.add_argument(
         "--validation_batch_size",
         type=int,
         default=8,
-        help="Batch size used for validation"
+        help="Batch size used for validation",
     )
 
     return parser.parse_args()
@@ -93,7 +97,7 @@ if __name__ == "__main__":
         lora_dropout=args.lora_dropout,
         lora_target_modules=args.lora_target_modules,
         lora_layers_to_transform=args.lora_layers_to_transform,
-        validation_batch_size = args.validation_batch_size
+        validation_batch_size=args.validation_batch_size,
     )
     if args.mode is UsageModes.TRAINING:
         train_model(config)

@@ -1,6 +1,7 @@
 """
 This module contains the evaluation pipeline for the model.
 """
+
 from pathlib import Path
 from typing import Tuple
 
@@ -31,9 +32,7 @@ def compute_metrics(y_pred: list, y_true: list) -> None:
     print(f"BLEU score: {bleu}")
 
 
-def batch_generator(
-    dataset: Dataset, batch_size: int, tokenizer: AutoTokenizer
-):
+def batch_generator(dataset: Dataset, batch_size: int, tokenizer: AutoTokenizer):
     """
     Generates batches of tokenized queries from the dataset.
 
@@ -111,8 +110,8 @@ def validation_loop(  # pylint: disable=too-many-locals
     """
     generation_settings = {
         "max_new_tokens": 64,
-        "num_beams": 1, 
-        "do_sample": False, 
+        "num_beams": 1,
+        "do_sample": False,
         "no_repeat_ngram_size": 4,
         "repetition_penalty": 1.0,
     }
@@ -138,7 +137,8 @@ def validation_loop(  # pylint: disable=too-many-locals
             batch_pred, batch["meaning_representation"]
         ):
             filtered_dataset = dataset.filter(
-                lambda x: x["meaning_representation"] == meaning_representation  # pylint: disable=cell-var-from-loop
+                lambda x: x["meaning_representation"]
+                == meaning_representation  # pylint: disable=cell-var-from-loop
             )
             for reference_sentence in filtered_dataset["validation"]["human_reference"]:
                 all_queries.append(meaning_representation)
@@ -165,9 +165,7 @@ def eval_model(arguments: TrainEvalArguments) -> None:
     peft_model = load_peft_model(model, path_to_peft_model)
     tokenizer = load_tokenizer(arguments.path_to_tokenizer)
     dataset = load_dataset(arguments.path_to_dataset)
-    batches = get_batch_generator(
-        dataset, arguments.validation_batch_size, tokenizer
-    )
+    batches = get_batch_generator(dataset, arguments.validation_batch_size, tokenizer)
 
     num_iterations = batches[1] // arguments.validation_batch_size
     all_queries, all_predicted, all_references = validation_loop(

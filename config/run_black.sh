@@ -8,8 +8,6 @@ echo 'Running black check...'
 
 configure_script
 
-python -m black --check main.py
-
 directories=$(get_project_directories)
 
 for directory in $directories; do

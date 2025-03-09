@@ -8,8 +8,6 @@ echo 'Running isort check...'
 
 configure_script
 
-python3 -m isort --check-only main.py
-
 directories=$(get_project_directories)
 
 for directory in $directories; do

@@ -1,6 +1,7 @@
 """
 This module contains functions for loading tokenizers.
 """
+
 from pathlib import Path
 
 from transformers import AutoTokenizer

@@ -1,6 +1,7 @@
 """
 This module contains the function to load a pre-trained model.
 """
+
 from pathlib import Path
 
 from peft import PeftModel
@@ -33,6 +34,7 @@ def load_model(
         pretrained_model.save_pretrained(path_to_save)
 
     return pretrained_model
+
 
 def load_peft_model(model: AutoModel, path: Path) -> PeftModel:
     """

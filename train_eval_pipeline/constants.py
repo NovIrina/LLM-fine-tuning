@@ -1,6 +1,7 @@
 """
 This file contains the constants used in the project.
 """
+
 from pathlib import Path
 
 PATH_TO_MODEL = Path("openai-community/gpt2")

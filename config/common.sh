@@ -39,6 +39,6 @@ check_if_failed() {
 }
 
 get_project_directories() {
-  local directories=('src' 'web_site')
+  local directories=('train_eval_pipeline' 'super_weights_identification' 'web_site')
   echo ${directories[@]}
 }

@@ -21,8 +21,9 @@ class SuperWeightsIdentification(Tap):
     """
     Defines the command-line arguments for the script.
     """
-    path_to_model: Path=PATH_TO_MODEL
-    path_to_tokenizer: Path=PATH_TO_TOKENIZER
+
+    path_to_model: Path = PATH_TO_MODEL
+    path_to_tokenizer: Path = PATH_TO_TOKENIZER
 
 
 def get_max_activations(
