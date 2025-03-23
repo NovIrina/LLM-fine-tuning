@@ -55,9 +55,7 @@ def create_app(model_to_launch: AutoModel, tokenizer_to_use: AutoTokenizer):
         return templates.TemplateResponse("index.html", {"request": request})
 
     @app.post("/generate", response_class=HTMLResponse)
-    async def generate_text(
-        request: Request, prompt: str = Form(...), max_length: int = Form(50)
-    ):
+    async def generate_text(request: Request, prompt: str = Form(...), max_length: int = Form(50)):
         """
         Handle form submission, generate text using GPT-2, and render the results.
         """
@@ -73,8 +71,7 @@ def create_app(model_to_launch: AutoModel, tokenizer_to_use: AutoTokenizer):
             )
 
             generated_texts = [
-                tokenizer_to_use.decode(output, skip_special_tokens=True)
-                for output in outputs
+                tokenizer_to_use.decode(output, skip_special_tokens=True) for output in outputs
             ]
 
             return templates.TemplateResponse(

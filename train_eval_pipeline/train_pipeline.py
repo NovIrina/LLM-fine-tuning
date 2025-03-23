@@ -6,8 +6,8 @@ from functools import partial
 from typing import Any, Dict, Tuple
 
 import evaluate
-from peft import LoraConfig, TaskType, get_peft_model
-from transformers import Trainer, TrainingArguments, default_data_collator
+from peft import get_peft_model, LoraConfig, TaskType
+from transformers import default_data_collator, Trainer, TrainingArguments
 
 from train_eval_pipeline.arguments import TrainEvalArguments
 from train_eval_pipeline.dataset import prepare_dataset

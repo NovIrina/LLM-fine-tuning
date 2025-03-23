@@ -47,9 +47,7 @@ def parse_arguments():
         default=PATH_TO_DATASET,
         help="Path to dataset",
     )
-    parser.add_argument(
-        "--lora_rank", type=int, default=4, help="Rank of LoRA adapters"
-    )
+    parser.add_argument("--lora_rank", type=int, default=4, help="Rank of LoRA adapters")
     parser.add_argument(
         "--lora_alpha",
         type=int,

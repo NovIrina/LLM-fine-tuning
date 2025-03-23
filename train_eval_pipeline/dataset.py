@@ -63,16 +63,11 @@ def process_batch(
     """
     batch = tokenizer(
         [
-            batch[column_names[0]][i]
-            + " "
-            + batch[column_names[1]][i]
-            + tokenizer.eos_token
+            batch[column_names[0]][i] + " " + batch[column_names[1]][i] + tokenizer.eos_token
             for i in range(len(batch[column_names[0]]))
         ],
         padding="max_length",
         max_length=512,
     )
-    batch["labels"] = [
-        create_label(input_ids, tokenizer) for input_ids in batch["input_ids"]
-    ]
+    batch["labels"] = [create_label(input_ids, tokenizer) for input_ids in batch["input_ids"]]
     return batch

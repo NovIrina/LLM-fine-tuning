@@ -1,11 +1,18 @@
-[[tool.mypy.overrides]]
-module = ["main.py", "web_site/*", "src/*"]
-disable_error_code = [
-    'import-untyped',
-    'import-not-found'
+[tool.isort]
+profile = 'black'
+py_version = '311'
+skip_gitignore = true
+line_length = 100
+order_by_type = true
+remove_redundant_aliases = true
+group_by_package = true
+force_alphabetical_sort_within_sections = true
+src_paths = [
+    "super_weights_identification",
+    "train_eval_pipeline",
+    "web_site"
 ]
 
-[tool.mypy]
-exclude = [
-    'venv'
-]
+[tool.black]
+line-length = 100
+target-version = ['py311']

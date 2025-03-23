@@ -76,11 +76,7 @@ def get_batch_generator(
         Tuple[iter, int]: A generator for batches and the total number of unique queries.
     """
     dataset = Dataset.from_dict(
-        {
-            "meaning_representation": dataset["validation"].unique(
-                "meaning_representation"
-            )
-        }
+        {"meaning_representation": dataset["validation"].unique("meaning_representation")}
     )
     return (
         batch_generator(dataset, batch_size, tokenizer),

@@ -52,12 +52,8 @@ def get_max_activations(
             inputs: Tuple[torch.Tensor],
             outputs: Tuple[torch.Tensor],
         ):
-            all_activations[f"Layer {layer_index}, module: {module_name} output"] = (
-                outputs[0]
-            )
-            all_activations[f"Layer {layer_index}, module: {module_name} input"] = (
-                inputs[0]
-            )
+            all_activations[f"Layer {layer_index}, module: {module_name} output"] = outputs[0]
+            all_activations[f"Layer {layer_index}, module: {module_name} input"] = inputs[0]
 
         return hook
 
@@ -73,9 +69,7 @@ def get_max_activations(
 
     pattern = r"Layer (?P<layer>\d+), module: (?P<module>[a-zA-Z\._]+)"
     largest_values_inputs = {i: {} for i in range(len(model._modules["transformer"].h))}
-    largest_values_outputs = {
-        i: {} for i in range(len(model._modules["transformer"].h))
-    }
+    largest_values_outputs = {i: {} for i in range(len(model._modules["transformer"].h))}
 
     for key, value in all_activations.items():
         tensor = value.detach().cpu()
@@ -131,15 +125,11 @@ def visualize_super_weights(model: torch.nn.Module, tokenizer: AutoTokenizer) ->
     inputs = tokenizer(text, return_tensors="pt").to(model.device)
     largest_values_inputs, largest_values_outputs = get_max_activations(model, inputs)
 
-    df_inputs = pd.DataFrame.from_dict(
-        largest_values_inputs, orient="index"
-    ).reset_index()
+    df_inputs = pd.DataFrame.from_dict(largest_values_inputs, orient="index").reset_index()
     df_inputs.rename(columns={"index": "layer_number"}, inplace=True)
     make_plot(df_inputs, "inputs")
 
-    df_outputs = pd.DataFrame.from_dict(
-        largest_values_outputs, orient="index"
-    ).reset_index()
+    df_outputs = pd.DataFrame.from_dict(largest_values_outputs, orient="index").reset_index()
     df_outputs.rename(columns={"index": "layer_number"}, inplace=True)
     make_plot(df_outputs, "outputs")
 
