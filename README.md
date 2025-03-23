@@ -81,7 +81,7 @@ to avoid uploading heavy files with the fine-tuned model to GitHub)
 
 ## Results 
 
-**Important:** results for some of these methods are not reported in the article for the GPT2 model, that is why I wrote here my results, when reproducing these methods with PEFT. All methods were used with the same hyperparameters. The *Quality* is defined as BLEU. 
+**Important:** results for some of these methods are not reported in the article for the GPT2 model, that is why I wrote here my results, when reproducing these methods with PEFT. All methods were used with the same hyperparameters. The *Quality* is estimated with BLEU. 
 
 | Method  |  Acceleration, % | Quality |
 |:-:|:-:|:-:|
