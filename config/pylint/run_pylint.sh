@@ -9,7 +9,6 @@ echo 'Running lint check...'
 configure_script
 
 INITIAL_PYTHONPATH=$PYTHONPATH
-python3 -m pylint --rcfile config/pylint/.pylintrc main.py
 
 directories=$(get_project_directories)
 

@@ -26,7 +26,14 @@ class WebSiteArguments(Tap):
     path_to_tokenizer: Path = PATH_TO_TOKENIZER
 
 
-def create_app(model: AutoModel, tokenizer: AutoTokenizer):
+def create_app(model_to_launch: AutoModel, tokenizer_to_use: AutoTokenizer):
+    """
+    Defines web application.
+
+    Args:
+        model_to_launch (AutoModel): Model to launch in web application.
+        tokenizer_to_use (AutoTokenizer): The tokenizer to be used on the dataset.
+    """
     app = FastAPI(
         title="GPT-2 Text Generator",
         description="A web interface to generate text using GPT-2",
@@ -38,7 +45,7 @@ def create_app(model: AutoModel, tokenizer: AutoTokenizer):
     templates = Jinja2Templates(directory="web_site/templates")
 
     device = get_torch_device()
-    model.to(device)
+    model_to_launch.to(device)
 
     @app.get("/", response_class=HTMLResponse)
     async def read_root(request: Request):
@@ -55,10 +62,10 @@ def create_app(model: AutoModel, tokenizer: AutoTokenizer):
         Handle form submission, generate text using GPT-2, and render the results.
         """
         try:
-            inputs = tokenizer.encode(prompt, return_tensors="pt")
+            inputs = tokenizer_to_use.encode(prompt, return_tensors="pt")
             inputs = inputs.to(device)
 
-            outputs = model.generate(
+            outputs = model_to_launch.generate(
                 inputs,
                 max_length=max_length,
                 num_return_sequences=1,
@@ -66,7 +73,7 @@ def create_app(model: AutoModel, tokenizer: AutoTokenizer):
             )
 
             generated_texts = [
-                tokenizer.decode(output, skip_special_tokens=True) for output in outputs
+                tokenizer_to_use.decode(output, skip_special_tokens=True) for output in outputs
             ]
 
             return templates.TemplateResponse(
@@ -98,7 +105,7 @@ if __name__ == "__main__":
     model = load_model(path_to_load=parser.path_to_model)
     tokenizer = load_tokenizer(parser.path_to_tokenizer)
 
-    app = create_app(model, tokenizer)
+    curr_app = create_app(model, tokenizer)
     import uvicorn
 
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(curr_app, host="127.0.0.1", port=8000)
