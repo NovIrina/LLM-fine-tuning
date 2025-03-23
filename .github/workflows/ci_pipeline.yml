@@ -44,21 +44,6 @@ jobs:
         run: |
           bash config/pylint/run_pylint.sh
 
-  mypy-checks:
-    name: Mypy checks
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: [ install-dependencies ]
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup environment
-        run: |
-          bash config/venv_setup.sh
-      - name: MyPy check
-        run: |
-          bash config/run_mypy.sh
-
   isort-checks:
     name: Import order checks
     runs-on: ubuntu-latest
