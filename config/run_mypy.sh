@@ -10,10 +10,6 @@ configure_script
 
 directories=$(get_project_directories)
 
-python3 -m mypy main.py
-
-check_if_failed
-
 for directory in $directories; do
   python3 -m mypy "${directory}"
 

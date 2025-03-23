@@ -81,15 +81,15 @@ to avoid uploading heavy files with the fine-tuned model to GitHub)
 
 ## Results 
 
-**Important:** results for some of these methods are not reported in the article for the GPT2 model, that is why I wrote here my results, when reproducing these methods with PEFT. All methods were used with the same hyperparameters.
+**Important:** results for some of these methods are not reported in the article for the GPT2 model, that is why I wrote here my results, when reproducing these methods with PEFT. All methods were used with the same hyperparameters. The *Quality* is defined as BLEU. 
 
 | Method  |  Acceleration, % | Quality |
 |:-:|:-:|:-:|
 | [LoRA](https://arxiv.org/abs/2106.09685) (baseline)  | --  | 68.4  |
 | Current Solution  | **25.47**  | 66.85 |
-| [LoRA+](https://arxiv.org/abs/2402.12354) | 0 | **69.59** |
-| [DoRA](https://arxiv.org/abs/2402.09353) | -36 | 68.22 |
-| [AdaLoRA](https://arxiv.org/abs/2303.10512) | -11 | 69.31 |
-| [PiSSA](https://arxiv.org/abs/2404.02948) | 0 | 67.47 |
+| [LoRA+](https://arxiv.org/abs/2402.12354) | 0.0 | **69.59** |
+| [DoRA](https://arxiv.org/abs/2402.09353) | -36.15 | 68.22 |
+| [AdaLoRA](https://arxiv.org/abs/2303.10512) | -11.27 | 69.31 |
+| [PiSSA](https://arxiv.org/abs/2404.02948) | 0.0 | 67.47 |
 
 **Conclusion:** proposed method of the LoRA-based fine-tuning of layers, containing Super Weights, provided decent results, accelerating fine-tuning by **25%** with a slight decrease in quality of **2.3%** compared to LoRA. 
