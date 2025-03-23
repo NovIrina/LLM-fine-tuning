@@ -6,12 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Union
 
-from train_eval_pipeline.constants import (
-    PATH_TO_DATASET,
-    PATH_TO_MODEL,
-    PATH_TO_PEFT_MODEL,
-    PATH_TO_TOKENIZER,
-)
+from train_eval_pipeline.constants import (PATH_TO_DATASET, PATH_TO_MODEL,
+                                           PATH_TO_PEFT_MODEL,
+                                           PATH_TO_TOKENIZER)
 
 
 @dataclass

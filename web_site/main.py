@@ -73,7 +73,8 @@ def create_app(model_to_launch: AutoModel, tokenizer_to_use: AutoTokenizer):
             )
 
             generated_texts = [
-                tokenizer_to_use.decode(output, skip_special_tokens=True) for output in outputs
+                tokenizer_to_use.decode(output, skip_special_tokens=True)
+                for output in outputs
             ]
 
             return templates.TemplateResponse(

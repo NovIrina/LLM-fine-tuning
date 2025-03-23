@@ -7,12 +7,9 @@ from pathlib import Path
 from typing import List, Optional
 
 from train_eval_pipeline.arguments import TrainEvalArguments
-from train_eval_pipeline.constants import (
-    PATH_TO_DATASET,
-    PATH_TO_MODEL,
-    PATH_TO_PEFT_MODEL,
-    PATH_TO_TOKENIZER,
-)
+from train_eval_pipeline.constants import (PATH_TO_DATASET, PATH_TO_MODEL,
+                                           PATH_TO_PEFT_MODEL,
+                                           PATH_TO_TOKENIZER)
 from train_eval_pipeline.eval_pipeline import eval_model
 from train_eval_pipeline.modes import UsageModes
 from train_eval_pipeline.train_pipeline import train_model
